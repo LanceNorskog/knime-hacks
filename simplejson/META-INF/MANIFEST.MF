@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: SimpleParser-Node extension for KNIME Workbench
+Bundle-SymbolicName: org.norskog.knime.json.simpleparser; singleton:=true
+Bundle-Version: 1.0.0
+Bundle-ClassPath: simpleparser.jar
+Bundle-Activator: us.norskog.knime.json.simpleparser.SimpleParserNodePlugin
+Bundle-Vendor: Lance Norskog
+Require-Bundle: org.eclipse.core.runtime,
+ org.knime.workbench.core,
+ org.knime.workbench.repository,
+ org.knime.base
+Bundle-ActivationPolicy: lazy
+Export-Package: us.norskog.knime.json.simpleparser
+
