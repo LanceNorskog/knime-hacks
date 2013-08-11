@@ -18,6 +18,7 @@ public class SimpleParserNodeFactory
      */
     @Override
     public SimpleParserNodeModel createNodeModel() {
+    	// Finished
         return new SimpleParserNodeModel();
     }
 
@@ -26,6 +27,7 @@ public class SimpleParserNodeFactory
      */
     @Override
     public int getNrNodeViews() {
+    	// Finished
         return 1;
     }
 
@@ -35,6 +37,7 @@ public class SimpleParserNodeFactory
     @Override
     public NodeView<SimpleParserNodeModel> createNodeView(final int viewIndex,
             final SimpleParserNodeModel nodeModel) {
+    	// Finished
         return new SimpleParserNodeView(nodeModel);
     }
 
@@ -43,6 +46,7 @@ public class SimpleParserNodeFactory
      */
     @Override
     public boolean hasDialog() {
+    	// Finished
         return true;
     }
 
@@ -51,6 +55,7 @@ public class SimpleParserNodeFactory
      */
     @Override
     public NodeDialogPane createNodeDialogPane() {
+    	// Finished
         return new SimpleParserNodeDialog();
     }
 

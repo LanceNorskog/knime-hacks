@@ -2,7 +2,9 @@ package us.norskog.knime.json.simpleparser;
 
 import org.knime.core.node.defaultnodesettings.DefaultNodeSettingsPane;
 import org.knime.core.node.defaultnodesettings.DialogComponentNumber;
+import org.knime.core.node.defaultnodesettings.DialogComponentString;
 import org.knime.core.node.defaultnodesettings.SettingsModelIntegerBounded;
+import org.knime.core.node.defaultnodesettings.SettingsModelString;
 
 /**
  * <code>NodeDialog</code> for the "SimpleParser" Node.
@@ -25,13 +27,11 @@ public class SimpleParserNodeDialog extends DefaultNodeSettingsPane {
     protected SimpleParserNodeDialog() {
         super();
         
-        addDialogComponent(new DialogComponentNumber(
-                new SettingsModelIntegerBounded(
-                    SimpleParserNodeModel.CFGKEY_COUNT,
-                    SimpleParserNodeModel.DEFAULT_COUNT,
-                    Integer.MIN_VALUE, Integer.MAX_VALUE),
-                    "Counter:", /*step*/ 1, /*componentwidth*/ 5));
-                    
+        addDialogComponent(new DialogComponentString(
+                new SettingsModelString(
+                    SimpleParserNodeModel.CFGKEY_FIELDNAME,
+                    SimpleParserNodeModel.DEFAULT_FIELDNAME),
+                    "Field:"));
     }
 }
 

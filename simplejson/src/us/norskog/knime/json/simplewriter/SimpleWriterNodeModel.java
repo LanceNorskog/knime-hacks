@@ -1,24 +1,14 @@
-package us.norskog.knime.json.simpleparser;
+package us.norskog.knime.json.simplewriter;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 
 import org.knime.core.data.DataCell;
 import org.knime.core.data.DataColumnSpec;
 import org.knime.core.data.DataColumnSpecCreator;
 import org.knime.core.data.DataRow;
 import org.knime.core.data.DataTableSpec;
-import org.knime.core.data.DataType;
-import org.knime.core.data.DataValue;
-import org.knime.core.data.DoubleValue;
-import org.knime.core.data.IntValue;
 import org.knime.core.data.RowKey;
-import org.knime.core.data.StringValue;
 import org.knime.core.data.def.DefaultRow;
 import org.knime.core.data.def.DoubleCell;
 import org.knime.core.data.def.IntCell;
@@ -27,9 +17,6 @@ import org.knime.core.node.BufferedDataContainer;
 import org.knime.core.node.BufferedDataTable;
 import org.knime.core.node.CanceledExecutionException;
 import org.knime.core.node.defaultnodesettings.SettingsModelIntegerBounded;
-import org.knime.core.node.defaultnodesettings.SettingsModelString;
-import org.knime.core.node.workflow.FlowVariable;
-import org.knime.core.node.workflow.FlowVariable.Type;
 import org.knime.core.node.ExecutionContext;
 import org.knime.core.node.ExecutionMonitor;
 import org.knime.core.node.InvalidSettingsException;
@@ -40,40 +27,40 @@ import org.knime.core.node.NodeSettingsWO;
 
 
 /**
- * This is the model implementation of SimpleParser.
- * Simple high-speed json parser for flat records. No sub-blocks or arrays supported.
+ * This is the model implementation of SimpleWriter.
+ * Writer for flat Json records- no sub-blocks or arrays supported.
  *
  * @author Lance Norskog
  */
-public class SimpleParserNodeModel extends NodeModel {
+public class SimpleWriterNodeModel extends NodeModel {
     
     // the logger instance
     private static final NodeLogger logger = NodeLogger
-            .getLogger(SimpleParserNodeModel.class);
+            .getLogger(SimpleWriterNodeModel.class);
         
     /** the settings key which is used to retrieve and 
         store the settings (from the dialog or from a settings file)    
        (package visibility to be usable from the dialog). */
-	static final String CFGKEY_FIELDNAME = "JSon Field";
+	static final String CFGKEY_COUNT = "Count";
 
-    /** initial default fieldname value. */
-    static final String DEFAULT_FIELDNAME = "line";
+    /** initial default count value. */
+    static final int DEFAULT_COUNT = 100;
 
     // example value: the models count variable filled from the dialog 
     // and used in the models execution method. The default components of the
     // dialog work with "SettingsModels".
-    private final SettingsModelString m_field =
-        new SettingsModelString(SimpleParserNodeModel.CFGKEY_FIELDNAME,
-                    SimpleParserNodeModel.DEFAULT_FIELDNAME);
-    // Json parser
-    SimpleParserCode simpleParser = new SimpleParserCode();
+    private final SettingsModelIntegerBounded m_count =
+        new SettingsModelIntegerBounded(SimpleWriterNodeModel.CFGKEY_COUNT,
+                    SimpleWriterNodeModel.DEFAULT_COUNT,
+                    Integer.MIN_VALUE, Integer.MAX_VALUE);
+    
 
     /**
      * Constructor for the node model.
      */
-    protected SimpleParserNodeModel() {
+    protected SimpleWriterNodeModel() {
     
-        //Finished
+        // TODO one incoming port and one outgoing port is assumed
         super(1, 1);
     }
 
@@ -84,46 +71,13 @@ public class SimpleParserNodeModel extends NodeModel {
     protected BufferedDataTable[] execute(final BufferedDataTable[] inData,
             final ExecutionContext exec) throws Exception {
 
-    	if (inData.length != 1) {
-    		throw new Exception("SimpleParser: requires 1 input table");
-    	}
         // TODO do something here
-    	BufferedDataTable inTable = inData[0];
-    	DataTableSpec tableSpec = inTable.getDataTableSpec();
-    	Iterator<DataColumnSpec> cellIter = tableSpec.iterator();
-    	
-    	
-    	Map<String, FlowVariable> flowVars = super.getAvailableFlowVariables();
-    	String field = m_field.getStringValue();
-    	if (! flowVars.containsKey(field)) {
-    		// TODO: how to do nothing?
-    	}
-        FlowVariable flowVar = flowVars.get(field);
-        String flowValue = flowVar.getStringValue();
-        Map<String, Object> fields = simpleParser.scan(flowValue);
-        List<DataColumnSpec> allColSpecs = new ArrayList<DataColumnSpec>();
-        List<DataCell> values = new ArrayList<DataCell>();
-        for(String name: flowVars.keySet()) {
-        	FlowVariable flow = flowVars.get(name);
-        	DataColumnSpec cellSpec = tableSpec.getColumnSpec(name);
-        	allColSpecs.add(cellSpec);
-        	
-        	if (fields.containsKey(name)) {
-        		Object jsonVar = fields.get(name);
-        		Class<? extends DataValue> objType = getType(jsonVar);
-        		if (! cellSpec.getType().isCompatible(objType)) {
-        			throw new IllegalArgumentException("Not a matching type");
-        		}
-        		
-        	}
-        }
-        DataTableSpec outputSpec = new DataTableSpec(allColSpecs.toArray(new DataColumnSpec[allColSpecs.size()]));
-        BufferedDataContainer container = exec.createDataContainer(outputSpec);
-        // TODO what about rowkey? assume a default creator
-        
+        logger.info("Node Model Stub... this is not yet implemented !");
 
+        
         // the data table spec of the single output table, 
         // the table will have three columns:
+        DataColumnSpec[] allColSpecs = new DataColumnSpec[3];
         allColSpecs[0] = 
             new DataColumnSpecCreator("Column 0", StringCell.TYPE).createSpec();
         allColSpecs[1] = 
@@ -159,18 +113,7 @@ public class SimpleParserNodeModel extends NodeModel {
         return new BufferedDataTable[]{out};
     }
 
-    private Class getType(Object value) {
-		if (value instanceof Double)
-			return DoubleValue.class;
-		else if (value instanceof Integer)
-			return IntValue.class;
-		else if (value instanceof String)
-			return StringValue.class;
-		else
-			throw new IllegalArgumentException("not a double, int or string");
-	}
-
-	/**
+    /**
      * {@inheritDoc}
      */
     @Override
